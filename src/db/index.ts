@@ -7,4 +7,4 @@ if (!URL) {
   throw Error("Database URL not found!");
 }
 
-const db = drizzle(URL);
+export const db = drizzle(URL);
