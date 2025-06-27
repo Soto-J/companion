@@ -171,7 +171,7 @@ export const SignUpView = () => {
                     name="confirmPassword"
                     render={({ field }) => (
                       <FormItem className="space-y-1">
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>Confirm Password</FormLabel>
 
                         <FormControl>
                           <Input
@@ -201,7 +201,7 @@ export const SignUpView = () => {
                   disabled={isPending}
                   className="w-full cursor-pointer"
                 >
-                  Sign in
+                  Sign up
                 </Button>
 
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
