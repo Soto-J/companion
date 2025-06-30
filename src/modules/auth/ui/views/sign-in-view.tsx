@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { OctagonAlertIcon } from "lucide-react";
+
+import { FaGithub, FaGoogle } from "react-icons/fa";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,8 +35,6 @@ export const SignInView = () => {
   const [error, setError] = useState<string | null>(null);
   const [isPending, setIspending] = useState(false);
 
-  const router = useRouter();
-
   const signInFormSchema = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,11 +51,30 @@ export const SignInView = () => {
       {
         email: data.email,
         password: data.password,
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
           setIspending(false);
-          router.push("/");
+        },
+        onError: ({ error }) => {
+          setIspending(false);
+          setError(error.message);
+        },
+      },
+    );
+  };
+
+  const onSocialSubmit = (provider: "google" | "github") => {
+    setError(null);
+    setIspending(true);
+
+    authClient.signIn.social(
+      { provider: provider, callbackURL: "/" },
+      {
+        onSuccess: () => {
+          setIspending(false);
+          setError(null);
         },
         onError: ({ error }) => {
           setIspending(false);
@@ -152,20 +170,22 @@ export const SignInView = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <Button
+                    onClick={() => onSocialSubmit("google")}
                     disabled={isPending}
                     variant="outline"
                     type="button"
                     className="w-full cursor-pointer"
                   >
-                    Google
+                    <FaGoogle />
                   </Button>
                   <Button
+                    onClick={() => onSocialSubmit("github")}
                     disabled={isPending}
                     variant="outline"
                     type="button"
                     className="w-full cursor-pointer"
                   >
-                    Github
+                    <FaGithub />
                   </Button>
                 </div>
 
