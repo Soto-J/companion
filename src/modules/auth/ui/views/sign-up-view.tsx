@@ -6,6 +6,8 @@ import Link from "next/link";
 
 import { OctagonAlertIcon } from "lucide-react";
 
+import { FaGithub, FaGoogle } from "react-icons/fa";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -62,12 +64,32 @@ export const SignUpView = () => {
         email: data.email,
         name: data.name,
         password: data.password,
+        callbackURL: "/", // Not working on sign-up
       },
       {
         onSuccess: () => {
           setIspending(false);
           setError(null);
           router.push("/");
+        },
+        onError: ({ error }) => {
+          setIspending(false);
+          setError(error.message);
+        },
+      },
+    );
+  };
+
+  const onSocialSubmit = (provider: "google" | "github") => {
+    setError(null);
+    setIspending(true);
+
+    authClient.signIn.social(
+      { provider: provider, callbackURL: "/" },
+      {
+        onSuccess: () => {
+          setIspending(false);
+          setError(null);
         },
         onError: ({ error }) => {
           setIspending(false);
@@ -212,20 +234,22 @@ export const SignUpView = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <Button
+                    onClick={() => onSocialSubmit("google")}
                     disabled={isPending}
                     variant="outline"
                     type="button"
                     className="w-full cursor-pointer"
                   >
-                    Google
+                    <FaGoogle />
                   </Button>
                   <Button
+                    onClick={() => onSocialSubmit("github")}
                     disabled={isPending}
                     variant="outline"
                     type="button"
                     className="w-full cursor-pointer"
                   >
-                    Github
+                    <FaGithub />
                   </Button>
                 </div>
 
