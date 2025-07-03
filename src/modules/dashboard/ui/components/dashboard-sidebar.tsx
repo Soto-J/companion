@@ -3,8 +3,12 @@
 import Link from "next/link";
 import Image from "next/image";
 
+import { cn } from "@/lib/utils";
+
 import { BotIcon, StarIcon, VideoIcon } from "lucide-react";
 
+import { DashboardUserButton } from "./dashboard-user-button";
+import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -17,7 +21,7 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
+import { usePathname } from "next/navigation";
 
 const firstSection = [
   { icon: VideoIcon, label: "Meetings", href: "/meetings" },
@@ -26,6 +30,9 @@ const firstSection = [
 const secondSection = [{ icon: StarIcon, label: "Upgrade", href: "/upgrade" }];
 
 export const DashboardSidebar = () => {
+  // const pathname = usePathname();
+  const pathname = "/agents";
+
   return (
     <Sidebar>
       <SidebarHeader className="text-sidebar-accent-foreground">
@@ -36,28 +43,74 @@ export const DashboardSidebar = () => {
       </SidebarHeader>
 
       <div className="px-4 py-2">
-        {/* <Separator /> */}
-        <SidebarSeparator className="text-[#5D6B68]" />
+        <Separator className="text-[#5D6B68] opacity-10" />
+        {/* <SidebarSeparator className="text-[#5D6B68]" /> */}
       </div>
 
       <SidebarContent>
-        <SidebarGroupContent>
-          <SidebarMenu>
-            {firstSection.map(({ href, label, icon: Icon }) => (
-              <SidebarMenuItem key={href}>
-                <SidebarMenuButton>
-                  <Link href={href}>
-                    <Icon />
-                    <span className="text-sm font-medium tracking-tight">
-                      {label}
-                    </span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroupContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {firstSection.map(({ href, label, icon: Icon }) => (
+                <SidebarMenuItem key={href}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname === href}
+                    className={cn(
+                      "from-sidebar-accent to-sidebar/50 via-sidebar/50 h-10 border border-transparent from-5% via-30% hover:border-[#5D6B68]/10 hover:bg-linear-to-r/oklch",
+                      pathname === href &&
+                        "border-[#5D6B68]/10 bg-linear-to-r/oklch",
+                    )}
+                  >
+                    <Link href={href}>
+                      <Icon className="size-5" />
+                      <span className="text-sm font-medium tracking-tight">
+                        {label}
+                      </span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <div className="px-4 py-2">
+          <Separator className="text-[#5D6B68] opacity-10" />
+          {/* <SidebarSeparator className="text-[#5D6B68]" /> */}
+        </div>
+
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {secondSection.map(({ href, label, icon: Icon }) => (
+                <SidebarMenuItem key={href}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname === href}
+                    className={cn(
+                      "from-sidebar-accent to-sidebar/50 via-sidebar/50 h-10 border border-transparent from-5% via-30% hover:border-[#5D6B68]/10 hover:bg-linear-to-r/oklch",
+                      pathname === href &&
+                        "border-[#5D6B68]/10 bg-linear-to-r/oklch",
+                    )}
+                  >
+                    <Link href={href}>
+                      <Icon className="size-5" />
+                      <span className="text-sm font-medium tracking-tight">
+                        {label}
+                      </span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter className="text-white">
+        <DashboardUserButton />
+      </SidebarFooter>
     </Sidebar>
   );
 };

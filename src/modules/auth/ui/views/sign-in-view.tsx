@@ -157,7 +157,7 @@ export const SignInView = () => {
                 <Button
                   type="submit"
                   disabled={isPending}
-                  className="w-full cursor-pointer"
+                  className="w-full cursor-pointer bg-primary"
                 >
                   Sign in
                 </Button>
@@ -202,7 +202,7 @@ export const SignInView = () => {
             </form>
           </Form>
 
-          <div className="relative hidden flex-col items-center justify-center gap-y-4 bg-radial from-green-700 to-green-900 md:flex">
+          <div className="from-sidebar-accent to-sidebar relative hidden flex-col items-center justify-center gap-y-4 bg-radial md:flex">
             <img src="/logo.svg" alt="Image" className="h-[92px] w-[92px]" />
             <p className="text-2xl font-semibold text-white">Companion.AI</p>
           </div>
