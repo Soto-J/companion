@@ -30,8 +30,7 @@ const firstSection = [
 const secondSection = [{ icon: StarIcon, label: "Upgrade", href: "/upgrade" }];
 
 export const DashboardSidebar = () => {
-  // const pathname = usePathname();
-  const pathname = "/agents";
+  const pathname = usePathname();
 
   return (
     <Sidebar>
