@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid";
+
 import {
   boolean,
   mysqlTable,
@@ -7,7 +9,7 @@ import {
 } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("user", {
-  id: varchar("id", { length: 36 }).primaryKey(),
+  id: varchar("id", { length: 32 }).primaryKey(),
   name: text("name").notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   emailVerified: boolean("email_verified")
@@ -23,23 +25,23 @@ export const user = mysqlTable("user", {
 });
 
 export const session = mysqlTable("session", {
-  id: varchar("id", { length: 36 }).primaryKey(),
+  id: varchar("id", { length: 32 }).primaryKey(),
   expiresAt: timestamp("expires_at").notNull(),
   token: varchar("token", { length: 255 }).notNull().unique(),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
-  userId: varchar("user_id", { length: 36 })
+  userId: varchar("user_id", { length: 32 })
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
 });
 
 export const account = mysqlTable("account", {
-  id: varchar("id", { length: 36 }).primaryKey(),
+  id: varchar("id", { length: 32 }).primaryKey(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
-  userId: varchar("user_id", { length: 36 })
+  userId: varchar("user_id", { length: 32 })
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   accessToken: text("access_token"),
@@ -54,7 +56,7 @@ export const account = mysqlTable("account", {
 });
 
 export const verification = mysqlTable("verification", {
-  id: varchar("id", { length: 36 }).primaryKey(),
+  id: varchar("id", { length: 32 }).primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
@@ -64,4 +66,17 @@ export const verification = mysqlTable("verification", {
   updatedAt: timestamp("updated_at").$defaultFn(
     () => /* @__PURE__ */ new Date(),
   ),
+});
+
+export const agents = mysqlTable("agents", {
+  id: varchar("id", { length: 21 })
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  name: text("name").notNull(),
+  userId: varchar("user_id", { length: 32 })
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  instructions: text("instructions").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

@@ -18,7 +18,7 @@ export function makeQueryClient() {
           query.state.status === "pending",
       },
       hydrate: {
-        // deserializeData: superjson.deserialize,
+        deserializeData: superjson.deserialize,
       },
     },
   });
