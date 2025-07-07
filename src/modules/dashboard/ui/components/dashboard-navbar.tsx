@@ -38,7 +38,7 @@ export const DashboardNavbar = () => {
         <Button
           variant="outline"
           onClick={() => toggleSidebar()}
-          className="size-9 cursor-pointer"
+          className="size-9"
         >
           <PanelIcon className="size-4" />
         </Button>
@@ -47,7 +47,7 @@ export const DashboardNavbar = () => {
           variant="outline"
           size="sm"
           onClick={() => setCommandOpen((open) => !open)}
-          className="text-muted-foreground hover:text-muted-foreground flex h-9 w-[240px] cursor-pointer justify-start font-normal"
+          className="text-muted-foreground hover:text-muted-foreground flex h-9 w-[240px] justify-start font-normal"
         >
           <SearchIcon />
           <p>Search</p>
