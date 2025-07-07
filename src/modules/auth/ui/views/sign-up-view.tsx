@@ -221,7 +221,7 @@ export const SignUpView = () => {
                 <Button
                   type="submit"
                   disabled={isPending}
-                  className="bg-primary w-full cursor-pointer"
+                  className="bg-primary w-full"
                 >
                   Sign up
                 </Button>
@@ -238,7 +238,7 @@ export const SignUpView = () => {
                     disabled={isPending}
                     variant="outline"
                     type="button"
-                    className="w-full cursor-pointer"
+                    className="w-full"
                   >
                     <FaGoogle />
                   </Button>
@@ -247,7 +247,7 @@ export const SignUpView = () => {
                     disabled={isPending}
                     variant="outline"
                     type="button"
-                    className="w-full cursor-pointer"
+                    className="w-full"
                   >
                     <FaGithub />
                   </Button>

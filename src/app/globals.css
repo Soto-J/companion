@@ -124,6 +124,12 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Gives buttons cursor-pointer */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
 /* Removes LastPass Icon */
