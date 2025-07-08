@@ -14,7 +14,7 @@ import { eq } from "drizzle-orm";
 
 export const agentsRouter = createTRPCRouter({
   // TODO: Change "getOne" to use protected procedure
-  getOne: baseProcedure
+  getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {
       const [existingAgent] = await db
@@ -26,7 +26,7 @@ export const agentsRouter = createTRPCRouter({
     }),
 
   // TODO: Change "getMany" to use protected procedure
-  getMany: baseProcedure.query(async () => {
+  getMany: protectedProcedure.query(async () => {
     const data = await db.select().from(agents);
     // Error test
     // throw new TRPCError({ code: "BAD_REQUEST" });

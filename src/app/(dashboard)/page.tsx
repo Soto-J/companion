@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 
 import { HomeView } from "@/modules/home/ui/views/home-view";
 
-const Page = async () => {
+const DashboardPage = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -15,4 +15,4 @@ const Page = async () => {
   return <HomeView />;
 };
 
-export default Page;
+export default DashboardPage;
