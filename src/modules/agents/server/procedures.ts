@@ -1,10 +1,10 @@
 import z from "zod";
 
+import { getTableColumns, sql, and, eq, desc, count, like } from "drizzle-orm";
+
 import { db } from "@/db";
 import { agents } from "@/db/schema";
-
 import { agentsInsertSchema } from "../schemas";
-import { getTableColumns, sql, and, eq, ilike, desc, count } from "drizzle-orm";
 
 import {
   createTRPCRouter,
@@ -58,7 +58,7 @@ export const agentsRouter = createTRPCRouter({
         .where(
           and(
             eq(agents.userId, ctx.auth.user.id),
-            search ? ilike(agents.name, `%${search}%`) : undefined,
+            search ? like(agents.name, `%${search}%`) : undefined,
           ),
         )
         .orderBy(desc(agents.createdAt), desc(agents.id))
@@ -71,7 +71,7 @@ export const agentsRouter = createTRPCRouter({
         .where(
           and(
             eq(agents.userId, ctx.auth.user.id),
-            search ? ilike(agents.name, `%${search}%`) : undefined,
+            search ? like(agents.name, `%${search}%`) : undefined,
           ),
         );
 

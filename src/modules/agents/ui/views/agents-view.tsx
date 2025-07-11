@@ -2,14 +2,14 @@
 
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
-
-import { DataTable } from "@/modules/agents/ui/components/data-table";
-import { Columns } from "@/modules/agents/ui/components/columns";
-
 import { useAgentsFilters } from "@/modules/agents/hooks/use-agents-filter";
+
 import { LoadingState } from "@/components/loading-state";
 import { ErrorState } from "@/components/error-state";
 import { EmptyState } from "@/components/empty-state";
+
+import { DataTable } from "@/modules/agents/ui/components/data-table";
+import { Columns } from "@/modules/agents/ui/components/columns";
 import { DataPagination } from "@/modules/agents/ui/components/data-pagination";
 
 export const AgentsView = () => {
@@ -17,7 +17,9 @@ export const AgentsView = () => {
 
   console.log({ filters });
   const trpc = useTRPC();
-  const { data } = useSuspenseQuery(trpc.agents.getMany.queryOptions({}));
+  const { data } = useSuspenseQuery(
+    trpc.agents.getMany.queryOptions({ ...filters }),
+  );
 
   console.log({ data });
   return (
