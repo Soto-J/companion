@@ -11,20 +11,24 @@ import { EmptyState } from "@/components/empty-state";
 import { DataTable } from "@/modules/agents/ui/components/data-table";
 import { Columns } from "@/modules/agents/ui/components/columns";
 import { DataPagination } from "@/modules/agents/ui/components/data-pagination";
+import { useRouter } from "next/navigation";
 
 export const AgentsView = () => {
   const [filters, setFilters] = useAgentsFilters();
+  const router = useRouter();
 
-  console.log({ filters });
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(
     trpc.agents.getMany.queryOptions({ ...filters }),
   );
 
-  console.log({ data });
   return (
     <div className="flex flex-1 flex-col gap-y-4 px-4 pb-4 md:px-8">
-      <DataTable columns={Columns} data={data.items} />
+      <DataTable
+        columns={Columns}
+        data={data.items}
+        onRowClick={(row) => router.push(`/agents/${row.id}`)}
+      />
 
       <DataPagination
         page={filters.page}
