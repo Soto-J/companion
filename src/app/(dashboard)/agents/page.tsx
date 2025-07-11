@@ -5,6 +5,8 @@ import { ErrorBoundary } from "react-error-boundary";
 
 import { auth } from "@/lib/auth";
 
+import type { SearchParams } from "nuqs";
+
 import { getQueryClient, trpc } from "@/trpc/server";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
@@ -14,14 +16,25 @@ import {
   AgentsErrorView,
   AgentsView,
 } from "@/modules/agents/ui/views/agents-view";
+import { loadSearchParams } from "@/modules/agents/ui/components/params";
 
-const AgentsPage = async () => {
+interface AgentsPageProps {
+  searchParams: Promise<SearchParams>;
+}
+
+const AgentsPage = async ({ searchParams }: AgentsPageProps) => {
+  const filters = await loadSearchParams(searchParams);
+
   const session = await auth.api.getSession({ headers: await headers() });
 
-  if (!session) redirect("/sign-in");
+  if (!session) {
+    redirect("/sign-in");
+  }
 
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.agents.getMany.queryOptions());
+  void queryClient.prefetchQuery(
+    trpc.agents.getMany.queryOptions({ ...filters }),
+  );
 
   return (
     <>
