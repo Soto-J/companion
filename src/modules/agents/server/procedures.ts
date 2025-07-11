@@ -6,6 +6,8 @@ import { db } from "@/db";
 import { agents } from "@/db/schema";
 import { agentsInsertSchema } from "../schemas";
 
+import { TRPCError } from "@trpc/server";
+
 import {
   createTRPCRouter,
   baseProcedure,
@@ -22,14 +24,21 @@ import {
 export const agentsRouter = createTRPCRouter({
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
       const [existingAgent] = await db
         .select({
+          // TODO: remove dummy meetingCount
           meetingCount: sql<number>`5`,
           ...getTableColumns(agents),
         })
         .from(agents)
-        .where(eq(agents.id, input.id));
+        .where(
+          and(eq(agents.id, input.id), eq(agents.userId, ctx.auth.user.id)),
+        );
+
+      if (!existingAgent) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Agent not found" });
+      }
 
       return existingAgent;
     }),
@@ -51,6 +60,7 @@ export const agentsRouter = createTRPCRouter({
 
       const data = await db
         .select({
+          // TODO: remove dummy meetingCount
           meetingCount: sql<number>`5`,
           ...getTableColumns(agents),
         })

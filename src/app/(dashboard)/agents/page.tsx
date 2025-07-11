@@ -10,13 +10,13 @@ import type { SearchParams } from "nuqs";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
+import { loadSearchParams } from "@/modules/agents/ui/components/params";
 import { AgentsListHeader } from "@/modules/agents/ui/components/agents-list-header";
 import {
   AgentsLoadingView,
   AgentsErrorView,
   AgentsView,
 } from "@/modules/agents/ui/views/agents-view";
-import { loadSearchParams } from "@/modules/agents/ui/components/params";
 
 interface AgentsPageProps {
   searchParams: Promise<SearchParams>;
