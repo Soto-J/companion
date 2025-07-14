@@ -11,12 +11,12 @@ interface UseConfirmProps {
 export const useConfirm = ({
   title,
   description,
-}: UseConfirmProps): [() => JSX.Element, () => Promise<unknown>] => {
+}: UseConfirmProps): [() => JSX.Element, () => Promise<boolean>] => {
   const [promise, setPromise] = useState<{
     resolve: (value: boolean) => void;
   } | null>(null);
 
-  const confirm = () => {
+  const confirm = (): Promise<boolean> => {
     return new Promise((resolve) => {
       setPromise({ resolve });
     });
