@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
@@ -19,9 +20,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { usePathname } from "next/navigation";
 
 const firstSection = [
   { icon: VideoIcon, label: "Meetings", href: "/meetings" },
@@ -43,7 +42,6 @@ export const DashboardSidebar = () => {
 
       <div className="px-4 py-2">
         <Separator className="text-[#5D6B68] opacity-10" />
-        {/* <SidebarSeparator className="text-[#5D6B68]" /> */}
       </div>
 
       <SidebarContent>
@@ -76,7 +74,6 @@ export const DashboardSidebar = () => {
 
         <div className="px-4 py-2">
           <Separator className="text-[#5D6B68] opacity-10" />
-          {/* <SidebarSeparator className="text-[#5D6B68]" /> */}
         </div>
 
         <SidebarGroup>
