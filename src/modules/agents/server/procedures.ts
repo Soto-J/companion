@@ -90,10 +90,6 @@ export const agentsRouter = createTRPCRouter({
       };
     }),
 
-  // getManyUsers: baseProcedure.query(async () => {
-  //   return await db.select().from(user);
-  // }),
-
   create: protectedProcedure
     .input(agentsInsertSchema)
     .mutation(async ({ input, ctx }) => {
