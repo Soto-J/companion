@@ -12,7 +12,7 @@ import {
   MeetingsView,
 } from "@/modules/meetings/ui/views/meetings-view";
 
-const MettingsPage = async () => {
+const MeetingsPage = async () => {
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(trpc.meetings.getMany.queryOptions({}));
 
@@ -27,4 +27,4 @@ const MettingsPage = async () => {
   );
 };
 
-export default MettingsPage;
+export default MeetingsPage;

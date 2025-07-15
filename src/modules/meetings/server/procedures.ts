@@ -1,9 +1,9 @@
 import z from "zod";
 
-import { getTableColumns, sql, and, eq, desc, count, like } from "drizzle-orm";
+import { getTableColumns, and, eq, desc, count, like } from "drizzle-orm";
 
 import { db } from "@/db";
-import { meetings, meetingStatus } from "@/db/schema";
+import { meetings } from "@/db/schema";
 
 import { TRPCError } from "@trpc/server";
 
@@ -17,7 +17,7 @@ import {
 } from "@/constants";
 
 export const meetingRouter = createTRPCRouter({
-  //   create: protectedProcedure.input(meetingStatus).query(async () => {}),
+  //   create: protectedProcedure.input().query(async () => {}),
 
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
