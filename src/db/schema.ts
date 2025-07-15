@@ -109,7 +109,7 @@ export const meetings = mysqlTable("meetings", {
   userId: varchar("user_id", { length: 32 })
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  agentId: varchar("agent_id", { length: 32 })
+  agentId: varchar("agent_id", { length: 21 })
     .notNull()
     .references(() => agents.id, { onDelete: "cascade" }),
 
