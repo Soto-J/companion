@@ -54,5 +54,5 @@ export const AgentsLoadingView = () => (
   />
 );
 export const AgentsErrorView = () => (
-  <ErrorState title="Error" description="Something went wrong!" />
+  <ErrorState title="Error Loading Agents" description="Something went wrong!" />
 );
