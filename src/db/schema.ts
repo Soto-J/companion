@@ -103,7 +103,6 @@ export const meetings = mysqlTable("meetings", {
     .primaryKey()
     .$defaultFn(() => nanoid()),
   name: text("name").notNull(),
-  instructions: text("instructions").notNull(),
   status: meetingStatus.notNull().default("upcoming"),
 
   userId: varchar("user_id", { length: 32 })
