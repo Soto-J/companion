@@ -39,7 +39,7 @@ export const meetingRouter = createTRPCRouter({
         .update(meetings)
         .set(input)
         .where(
-          and(eq(meetings.id, input.id), eq(meetings.id, ctx.auth.user.id)),
+          and(eq(meetings.id, input.id), eq(meetings.userId, ctx.auth.user.id)),
         );
 
       if (!updatedMeeting) {

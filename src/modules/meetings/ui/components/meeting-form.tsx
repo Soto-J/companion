@@ -111,7 +111,7 @@ export const MeetingForm = ({
   });
 
   const isEdit = !!initialValues?.id;
-  const isPending = createMeeting.isPending || createMeeting.isPending;
+  const isPending = createMeeting.isPending || updateMeeting.isPending;
 
   const onSubmit = (values: z.infer<typeof meetingsInsertSchema>) => {
     if (isEdit) {
@@ -205,7 +205,7 @@ export const MeetingForm = ({
               </Button>
             )}
             <Button type="submit" disabled={isPending}>
-              {isEdit ? "Edit" : "Create"} new Meeting
+              {isEdit ? "Edit" : "Create new"} Meeting
             </Button>
           </div>
         </form>
