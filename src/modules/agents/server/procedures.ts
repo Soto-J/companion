@@ -18,6 +18,53 @@ import {
 } from "@/constants";
 
 export const agentsRouter = createTRPCRouter({
+  create: protectedProcedure
+    .input(agentsInsertSchema)
+    .mutation(async ({ ctx, input }) => {
+      const [createdAgent] = await db
+        .insert(agents)
+        .values({
+          userId: ctx.auth.user.id,
+          ...input,
+        })
+        .$returningId();
+
+      return createdAgent;
+    }),
+
+  remove: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const [removedAgent] = await db
+        .delete(agents)
+        .where(
+          and(eq(agents.id, input.id), eq(agents.userId, ctx.auth.user.id)),
+        );
+
+      if (!removedAgent) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Agent not found" });
+      }
+
+      return removedAgent;
+    }),
+
+  edit: protectedProcedure
+    .input(agentsUpdateSchema)
+    .mutation(async ({ ctx, input }) => {
+      const [editedAgent] = await db
+        .update(agents)
+        .set(input)
+        .where(
+          and(eq(agents.id, input.id), eq(agents.userId, ctx.auth.user.id)),
+        );
+
+      if (!editedAgent) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Agent not found" });
+      }
+
+      return editedAgent;
+    }),
+
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -88,52 +135,5 @@ export const agentsRouter = createTRPCRouter({
         total: total.count,
         totalPages,
       };
-    }),
-
-  create: protectedProcedure
-    .input(agentsInsertSchema)
-    .mutation(async ({ input, ctx }) => {
-      const [createdAgent] = await db
-        .insert(agents)
-        .values({
-          userId: ctx.auth.user.id,
-          ...input,
-        })
-        .$returningId();
-
-      return createdAgent;
-    }),
-
-  remove: protectedProcedure
-    .input(z.object({ id: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      const [removedAgent] = await db
-        .delete(agents)
-        .where(
-          and(eq(agents.id, input.id), eq(agents.userId, ctx.auth.user.id)),
-        );
-
-      if (!removedAgent) {
-        throw new TRPCError({ code: "NOT_FOUND", message: "Agent not found" });
-      }
-
-      return removedAgent;
-    }),
-
-  edit: protectedProcedure
-    .input(agentsUpdateSchema)
-    .mutation(async ({ ctx, input }) => {
-      const [editedAgent] = await db
-        .update(agents)
-        .set(input)
-        .where(
-          and(eq(agents.id, input.id), eq(agents.userId, ctx.auth.user.id)),
-        );
-
-      if (!editedAgent) {
-        throw new TRPCError({ code: "NOT_FOUND", message: "Agent not found" });
-      }
-
-      return editedAgent;
     }),
 });

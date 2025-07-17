@@ -8,14 +8,14 @@ import { useAgentsFilters } from "@/modules/agents/hooks/use-agents-filter";
 
 import { DEFAULT_PAGE } from "@/constants";
 
-import { Button } from "@/components/ui/button";
-
 import { NewAgentDialog } from "@/modules/agents/ui/components/new-agent-dialog";
 import { AgentsSearchFilter } from "@/modules/agents/ui/components/agents-search-filter";
 
+import { Button } from "@/components/ui/button";
+
 export const AgentsListHeader = () => {
+  const [showNewAgentDialog, setShowNewAgentDialog] = useState(false);
   const [filters, setFilters] = useAgentsFilters();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const isFilterActive = !!filters.search;
 
@@ -28,13 +28,16 @@ export const AgentsListHeader = () => {
 
   return (
     <>
-      <NewAgentDialog isOpen={isDialogOpen} onOpenChange={setIsDialogOpen} />
+      <NewAgentDialog
+        isOpen={showNewAgentDialog}
+        onOpenChange={setShowNewAgentDialog}
+      />
 
       <div className="flex flex-col gap-y-4 px-4 py-4 md:px-8">
         <div className="flex items-center justify-between">
           <h5 className="text-xl font-medium">My Agents</h5>
 
-          <Button onClick={() => setIsDialogOpen(true)}>
+          <Button onClick={() => setShowNewAgentDialog(true)}>
             <PlusIcon />
             <span>New Agent</span>
           </Button>
