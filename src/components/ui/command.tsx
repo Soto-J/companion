@@ -38,6 +38,15 @@ function Command({
   );
 }
 
+/**
+ * Displays a command palette inside a modal dialog with customizable title, description, and content.
+ *
+ * @param title - The dialog's accessible title, hidden visually but available to screen readers
+ * @param description - The dialog's accessible description, hidden visually but available to screen readers
+ * @param showCloseButton - Whether to display a close button in the dialog
+ * @param className - Additional class names for the dialog content
+ * @returns A modal dialog containing the command palette UI
+ */
 function CommandDialog({
   title = "Command Palette",
   description = "Search for a command to run...",
@@ -69,6 +78,15 @@ function CommandDialog({
   );
 }
 
+/**
+ * Displays a responsive command palette dialog that adapts to mobile and desktop devices.
+ *
+ * On mobile devices, renders the command palette inside a drawer; on larger screens, uses a modal dialog. Supports customizable title, description, close button visibility, filtering behavior, and drawer direction. The command palette content is provided via the `children` prop.
+ *
+ * @param children - The content of the command palette, typically command groups and items.
+ * @param shouldFilter - Whether to enable built-in filtering of command items. Defaults to `true`.
+ * @param direction - The direction from which the drawer appears on mobile devices. Defaults to `"bottom"`.
+ */
 function CommandResponsiveDialog({
   children,
   title = "Command Palette",
