@@ -16,6 +16,8 @@ export const NewMeetingDialog = ({
   const router = useRouter();
 
   const onSuccess = (id?: string) => {
+    if (!id) return;
+
     onOpenChange(false);
     router.push(`/meetings/${id}`);
   };

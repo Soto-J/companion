@@ -38,7 +38,6 @@ export const CommandSelect = ({
 
   const selectedAgentOption = options.find((option) => option.value === value);
 
- 
   return (
     <>
       <Button
@@ -60,7 +59,7 @@ export const CommandSelect = ({
         shouldFilter={!onSearch}
         onOpenChange={setIsOpen}
       >
-        <CommandInput placeholder="Search..." onValueChange={onSearch} value={""} />
+        <CommandInput placeholder="Search..." onValueChange={onSearch} />
 
         <CommandList>
           {options.map((option) => (
