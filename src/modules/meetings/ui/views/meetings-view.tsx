@@ -5,6 +5,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { ErrorState } from "@/components/error-state";
 import { LoadingState } from "@/components/loading-state";
+import { DataTable } from "@/components/data-table";
+import { Columns } from "@/modules/meetings/ui/components/columns";
 
 export const MeetingsView = () => {
   const trpc = useTRPC();
@@ -12,7 +14,7 @@ export const MeetingsView = () => {
 
   return (
     <div>
-      Meetings PageView
+      <DataTable data={data.items} columns={Columns} />
       <div>{JSON.stringify(data, null, 2)}</div>
     </div>
   );

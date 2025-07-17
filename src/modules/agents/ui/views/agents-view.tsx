@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useAgentsFilters } from "@/modules/agents/hooks/use-agents-filter";
@@ -11,7 +13,6 @@ import { EmptyState } from "@/components/empty-state";
 import { DataTable } from "@/modules/agents/ui/components/data-table";
 import { Columns } from "@/modules/agents/ui/components/columns";
 import { DataPagination } from "@/modules/agents/ui/components/data-pagination";
-import { useRouter } from "next/navigation";
 
 export const AgentsView = () => {
   const [filters, setFilters] = useAgentsFilters();
