@@ -5,7 +5,7 @@ interface MeetingIdPageProps {
 const MeetingIdPage = async ({ params }: MeetingIdPageProps) => {
   const { meetingId } = await params;
 
-  return <div>MeetingIdPage</div>;
+  return <div>Meeting Id {meetingId}</div>;
 };
 
 export default MeetingIdPage;

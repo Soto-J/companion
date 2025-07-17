@@ -6,8 +6,6 @@ import { db } from "@/db";
 import { agents, meetings } from "@/db/schema";
 import { meetingsInsertSchema, meetingsUpdateSchema } from "../schemas";
 
-import { MeetingGetOne } from "../types";
-
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 
@@ -55,7 +53,7 @@ export const meetingRouter = createTRPCRouter({
     }),
   remove: protectedProcedure
     .input(meetingsInsertSchema)
-    .mutation(async ({ ctx, input }) => {}),
+    .mutation(async ({}) => {}),
 
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))

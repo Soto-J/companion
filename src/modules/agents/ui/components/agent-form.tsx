@@ -56,10 +56,9 @@ export const AgentForm = ({
       onError: (error) => {
         toast.error(error.message);
 
-        // Check if error code is FORBIDDEN, redirect to /upgrade
-        // if (error.data?.code === "FORBIDDEN") {
-        //   router.push("/upgrade");
-        // }
+        if (error.data?.code === "FORBIDDEN") {
+          router.push("/upgrade");
+        }
       },
     }),
   );
@@ -82,10 +81,9 @@ export const AgentForm = ({
       onError: (error) => {
         toast.error(error.message);
 
-        // Check if error code is FORBIDDEN, redirect to /upgrade
-        // if (error.data?.code === "FORBIDDEN") {
-        //   router.push("/upgrade");
-        // }
+        if (error.data?.code === "FORBIDDEN") {
+          router.push("/upgrade");
+        }
       },
     }),
   );

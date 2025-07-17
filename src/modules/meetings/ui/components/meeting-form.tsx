@@ -79,7 +79,7 @@ export const MeetingForm = ({
 
   const updateMeeting = useMutation(
     trpc.meetings.edit.mutationOptions({
-      onSuccess: async (data) => {
+      onSuccess: async () => {
         await queryClient.invalidateQueries(
           trpc.meetings.getMany.queryOptions({}),
         );

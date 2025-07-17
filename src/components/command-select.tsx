@@ -41,6 +41,7 @@ export const CommandSelect = ({
   return (
     <>
       <Button
+        disabled={isSearchable}
         type="button"
         variant="outline"
         onClick={() => setIsOpen(true)}
