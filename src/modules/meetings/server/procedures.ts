@@ -101,7 +101,11 @@ export const meetingRouter = createTRPCRouter({
           //     sql<number>`EXTRACT (EPOCH FROM (ended_at - started_at))`.as(
           //       "duration",
           //     ),
-          duration: sql<number>`5`
+          duration: sql<number>`CASE
+            WHEN ${meetings.endedAt} IS NOT NULL AND ${meetings.startedAt} IS NOT NULL
+            THEN TIMESTAMPDIFF(SECOND, ${meetings.startedAt}, ${meetings.endedAt})
+            ELSE NULL
+            END`.as("duration"),
         })
         .from(meetings)
         .innerJoin(agents, eq(meetings.agentId, agents.id))

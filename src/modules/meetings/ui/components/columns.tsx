@@ -1,7 +1,10 @@
 "use client";
 
 import { format } from "date-fns";
+
 import humanizeDuration from "humanize-duration";
+
+import { cn } from "@/lib/utils";
 
 import {
   CircleCheckIcon,
@@ -17,7 +20,6 @@ import { MeetingGetMany } from "@/modules/meetings/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { GeneratedAvatar } from "@/components/generated-avatar";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 
 function formatDuration(seconds: number) {
   return humanizeDuration(seconds * 1_000, {
@@ -27,21 +29,21 @@ function formatDuration(seconds: number) {
   });
 }
 
-const statusIconMap = {
-  upcoming: ClockArrowUpIcon,
-  active: LoaderIcon,
-  completed: CircleCheckIcon,
-  processing: LoaderIcon,
-  cancelled: CircleXIcon,
-};
+// const statusIconMap = {
+//   upcoming: ClockArrowUpIcon,
+//   active: LoaderIcon,
+//   completed: CircleCheckIcon,
+//   processing: LoaderIcon,
+//   cancelled: CircleXIcon,
+// };
 
-const statusColorMap = {
-  upcoming: "bg-yellow-500/20 text-yellow-800 border-yellow-800/5",
-  active: "bg-blue-500/20 text-blue-800 border-blue-800/5",
-  completed: "bg-emerald-500/20 text-emerald-800 border-emerald-800/5-",
-  cancelled: "bg-rose-500/20 text-rose-800 border-rose-800/5",
-  processing: "bg-gray-300/20 text-gray-800 border-gray-800/5",
-};
+// const statusColorMap = {
+//   upcoming: "bg-yellow-500/20 text-yellow-800 border-yellow-800/5",
+//   active: "bg-blue-500/20 text-blue-800 border-blue-800/5",
+//   completed: "bg-emerald-500/20 text-emerald-800 border-emerald-800/5-",
+//   cancelled: "bg-rose-500/20 text-rose-800 border-rose-800/5",
+//   processing: "bg-gray-300/20 text-gray-800 border-gray-800/5",
+// };
 const statusIconColorMap = {
   upcoming: {
     icon: ClockArrowUpIcon,
@@ -53,14 +55,14 @@ const statusIconColorMap = {
   },
   completed: {
     icon: CircleCheckIcon,
-    iconColor: "bg-emerald-500/20 text-emerald-800 border-emerald-800/5-",
+    iconColor: "bg-emerald-500/20 text-emerald-800 border-emerald-800/5",
   },
   cancelled: {
-    icon: LoaderIcon,
+    icon: CircleXIcon,
     iconColor: "bg-rose-500/20 text-rose-800 border-rose-800/5",
   },
   processing: {
-    icon: CircleXIcon,
+    icon: LoaderIcon,
     iconColor: "bg-gray-300/20 text-gray-800 border-gray-800/5",
   },
 };
