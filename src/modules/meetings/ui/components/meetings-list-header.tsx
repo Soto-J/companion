@@ -2,30 +2,63 @@
 
 import { useState } from "react";
 
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, XCircleIcon } from "lucide-react";
+
+import { DEFAULT_PAGE } from "@/constants";
+
+import { useMeetingsFilters } from "@/modules/meetings/hooks/use-meetings-filter";
+
+import { NewMeetingDialog } from "@/modules/meetings/ui/components/new-meeting-dialog";
+import { MeetingsSearchFilter } from "@/modules/meetings/ui/components/meetings-search-filter";
+import { StatusFilter } from "@/modules/meetings/ui/components/status-filters";
+import { AgentIdFilter } from "@/modules/meetings/ui/components/agent-id-filter";
 
 import { Button } from "@/components/ui/button";
-import { NewMeetingDialog } from "./new-meeting-dialog";
 
 export const MeetingsListHeader = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  // const [filters, setFilters] = useAgentsFilters();
+  const [showMeetingDialog, setShowMeetingDialog] = useState(false);
+  const [filters, setFilters] = useMeetingsFilters();
+
+  const isFilterActive =
+    !!filters.search || !!filters.agentId || filters.status;
+
+  const onClearFilters = () =>
+    setFilters({
+      search: "",
+      agentId: "",
+      status: null,
+      page: DEFAULT_PAGE,
+    });
 
   return (
     <>
-      <NewMeetingDialog isOpen={isDialogOpen} onOpenChange={setIsDialogOpen} />
+      <NewMeetingDialog
+        isOpen={showMeetingDialog}
+        onOpenChange={setShowMeetingDialog}
+      />
 
       <div className="flex flex-col gap-y-4 px-4 py-4 md:px-8">
         <div className="flex items-center justify-between">
           <h5 className="text-xl font-medium">My Meetings</h5>
 
-          <Button onClick={() => setIsDialogOpen(true)}>
+          <Button onClick={() => setShowMeetingDialog(true)}>
             <PlusIcon />
             <span>New Meeting</span>
           </Button>
         </div>
 
-        <div className="flex items-center gap-x-2 p-1">TODO: Filters</div>
+        <div className="flex items-center gap-x-2 p-1">
+          <MeetingsSearchFilter />
+          <StatusFilter />
+          <AgentIdFilter />
+
+          {isFilterActive && (
+            <Button variant="outline" size="sm" onClick={onClearFilters}>
+              <XCircleIcon />
+              <span>Clear</span>
+            </Button>
+          )}
+        </div>
       </div>
     </>
   );

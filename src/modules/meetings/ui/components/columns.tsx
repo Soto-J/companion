@@ -29,21 +29,6 @@ function formatDuration(seconds: number) {
   });
 }
 
-// const statusIconMap = {
-//   upcoming: ClockArrowUpIcon,
-//   active: LoaderIcon,
-//   completed: CircleCheckIcon,
-//   processing: LoaderIcon,
-//   cancelled: CircleXIcon,
-// };
-
-// const statusColorMap = {
-//   upcoming: "bg-yellow-500/20 text-yellow-800 border-yellow-800/5",
-//   active: "bg-blue-500/20 text-blue-800 border-blue-800/5",
-//   completed: "bg-emerald-500/20 text-emerald-800 border-emerald-800/5-",
-//   cancelled: "bg-rose-500/20 text-rose-800 border-rose-800/5",
-//   processing: "bg-gray-300/20 text-gray-800 border-gray-800/5",
-// };
 const statusIconColorMap = {
   upcoming: {
     icon: ClockArrowUpIcon,
@@ -105,8 +90,6 @@ export const Columns: ColumnDef<MeetingGetMany[number]>[] = [
         statusIconColorMap[
           row.original.status as keyof typeof statusIconColorMap
         ];
-      // const Icon =
-      //   statusIconMap[row.original.status as keyof typeof statusIconMap];
 
       return (
         <Badge
@@ -114,7 +97,6 @@ export const Columns: ColumnDef<MeetingGetMany[number]>[] = [
           className={cn(
             "text-muted-foreground capitalize [&>svg]:size-4",
             iconColor,
-            // statusColorMap[row.original.status as keyof typeof statusColorMap],
           )}
         >
           <Icon
