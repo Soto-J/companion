@@ -10,18 +10,18 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 
-import { VideoIcon } from "lucide-react";
-import { toast } from "sonner";
-
 import { useConfirm } from "@/hooks/use-confirm";
 
-import { AgentIdViewHeader } from "@/modules/agents/ui/components/agent-id-view-header";
+import { VideoIcon } from "lucide-react";
+
+import { toast } from "sonner";
 
 import { ErrorState } from "@/components/error-state";
 import { LoadingState } from "@/components/loading-state";
-import { Badge } from "@/components/ui/badge";
 import { GeneratedAvatar } from "@/components/generated-avatar";
+import { Badge } from "@/components/ui/badge";
 
+import { AgentIdViewHeader } from "@/modules/agents/ui/components/agent-id-view-header";
 import { UpdateAgentDialog } from "@/modules/agents/ui/components/update-agent-dialog";
 
 interface AgentIdViewProps {
@@ -29,8 +29,8 @@ interface AgentIdViewProps {
 }
 
 export const AgentIdView = ({ agentId }: AgentIdViewProps) => {
-  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
-  
+  const [showEditDialog, setShowEditDialog] = useState(false);
+
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -58,7 +58,7 @@ export const AgentIdView = ({ agentId }: AgentIdViewProps) => {
     description: `The following action will remove ${data.name} along with ${data.meetingCount} ${data.meetingCount === 1 ? "meeting" : "meetings"}`,
   });
 
-  const handleRemoveAgent = async () => {
+  const onRemoveAgent = async () => {
     const ok = await confirmRemove();
     if (!ok) return;
 
@@ -70,16 +70,16 @@ export const AgentIdView = ({ agentId }: AgentIdViewProps) => {
       <RemoveConfirmationDialog />
       <UpdateAgentDialog
         initialValues={data}
-        isOpen={isUpdateDialogOpen}
-        onOpenChange={setIsUpdateDialogOpen}
+        isOpen={showEditDialog}
+        onOpenChange={setShowEditDialog}
       />
 
       <div className="flex flex-1 flex-col gap-y-4 p-4 md:px-8">
         <AgentIdViewHeader
           agentId={agentId}
           agentName={data.name}
-          onEdit={() => setIsUpdateDialogOpen(true)}
-          onRemove={handleRemoveAgent}
+          onEdit={() => setShowEditDialog(true)}
+          onRemove={onRemoveAgent}
         />
 
         <div className="rounded-lg border bg-white">
@@ -106,8 +106,6 @@ export const AgentIdView = ({ agentId }: AgentIdViewProps) => {
               <p className="text-lg font-medium">Instructions</p>
               <p className="text-neutral-800">{data.instructions}</p>
             </div>
-
-            {JSON.stringify(data, null, 2)}
           </div>
         </div>
       </div>

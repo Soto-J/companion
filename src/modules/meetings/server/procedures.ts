@@ -4,7 +4,12 @@ import { getTableColumns, and, eq, desc, count, like, sql } from "drizzle-orm";
 
 import { db } from "@/db";
 import { agents, meetings } from "@/db/schema";
-import { meetingsInsertSchema, meetingsUpdateSchema } from "../schemas";
+
+import {
+  meetingsInsertSchema,
+  meetingsRemoveSchema,
+  meetingsUpdateSchema,
+} from "@/modules/meetings/schemas";
 
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
@@ -53,16 +58,41 @@ export const meetingRouter = createTRPCRouter({
 
       return updatedMeeting;
     }),
+
   remove: protectedProcedure
-    .input(meetingsInsertSchema)
-    .mutation(async ({}) => {}),
+    .input(meetingsRemoveSchema)
+    .mutation(async ({ ctx, input }) => {
+      const [deletedMeeting] = await db
+        .delete(meetings)
+        .where(
+          and(eq(meetings.id, input.id), eq(meetings.userId, ctx.auth.user.id)),
+        );
+
+      if (!deletedMeeting) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Meeting not found",
+        });
+      }
+
+      return deletedMeeting;
+    }),
 
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const [existingMeeting] = await db
-        .select({ ...getTableColumns(meetings) })
+        .select({
+          ...getTableColumns(meetings),
+          agent: agents,
+          duration: sql<number>`CASE
+            WHEN ${meetings.endedAt} IS NOT NULL AND ${meetings.startedAt} IS NOT NULL
+            THEN TIMESTAMPDIFF(SECOND, ${meetings.startedAt}, ${meetings.endedAt})
+            ELSE NULL
+            END`.as("duration"),
+        })
         .from(meetings)
+        .innerJoin(agents, eq(agents.id, meetings.agentId))
         .where(
           and(eq(meetings.id, input.id), eq(meetings.userId, ctx.auth.user.id)),
         );

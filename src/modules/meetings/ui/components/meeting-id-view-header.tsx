@@ -23,26 +23,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-interface AgentIdViewHeaderProps {
-  agentId: string;
-  agentName: string;
+interface MeetingIdViewHeaderProps {
+  meetingId: string;
+  meetingName: string;
   onEdit: () => void;
   onRemove: () => void;
 }
 
-export const AgentIdViewHeader = ({
-  agentId,
-  agentName,
+export const MeetingIdViewHeader = ({
+  meetingId,
+  meetingName,
   onEdit,
   onRemove,
-}: AgentIdViewHeaderProps) => {
+}: MeetingIdViewHeaderProps) => {
   return (
     <div className="flex items-center justify-between">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild className="text-xl font-medium">
-              <Link href="/agents">My Agents</Link>
+              <Link href="/agents">My Meetings</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
 
@@ -55,7 +55,7 @@ export const AgentIdViewHeader = ({
               asChild
               className="text-foreground text-xl font-medium"
             >
-              <Link href={`/agents/${agentId}`}>{agentName}</Link>
+              <Link href={`/agents/${meetingId}`}>{meetingName}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
