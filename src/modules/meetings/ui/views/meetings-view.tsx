@@ -11,7 +11,6 @@ import { DataTable } from "@/components/data-table";
 import { DataPagination } from "@/components/data-pagination";
 
 import { Columns } from "@/modules/meetings/ui/components/columns";
-import { Router } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export const MeetingsView = () => {
