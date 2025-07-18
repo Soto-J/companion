@@ -26,9 +26,7 @@ interface MeetingsPageProps {
 }
 
 const MeetingsPage = async ({ searchParams }: MeetingsPageProps) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) {
     redirect("/sign-in");

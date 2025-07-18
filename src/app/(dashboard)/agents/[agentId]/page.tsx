@@ -1,8 +1,12 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+
 import { ErrorBoundary } from "react-error-boundary";
 
-import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import { auth } from "@/lib/auth";
 
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { getQueryClient, trpc } from "@/trpc/server";
 
 import {
@@ -16,6 +20,12 @@ interface AgentIdPage {
 }
 
 const AgentIdPage = async ({ params }: AgentIdPage) => {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
   const { agentId } = await params;
 
   const queryClient = getQueryClient();
