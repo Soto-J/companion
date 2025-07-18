@@ -1,5 +1,3 @@
-import { useDeferredValue } from "react";
-
 import { SearchIcon } from "lucide-react";
 
 import { useMeetingsFilters } from "@/modules/meetings/hooks/use-meetings-filter";
@@ -9,14 +7,11 @@ import { Input } from "@/components/ui/input";
 export const MeetingsSearchFilter = () => {
   const [filters, setFilters] = useMeetingsFilters();
 
-  // This would defer the search state updates to avoid excessive filtering during rapid typing.
-  const deferredSearch = useDeferredValue(filters.search);
-
   return (
     <div className="relative">
       <Input
         placeholder="Filter by name"
-        value={deferredSearch}
+        value={filters.search}
         onChange={(e) => setFilters({ search: e.target.value })}
         className="h-9 w-[200px] bg-white pl-7"
       />
