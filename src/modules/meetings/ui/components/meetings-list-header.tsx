@@ -14,6 +14,8 @@ import { StatusFilter } from "@/modules/meetings/ui/components/status-filters";
 import { AgentIdFilter } from "@/modules/meetings/ui/components/agent-id-filter";
 
 import { Button } from "@/components/ui/button";
+import { ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 export const MeetingsListHeader = () => {
   const [showMeetingDialog, setShowMeetingDialog] = useState(false);
@@ -47,18 +49,22 @@ export const MeetingsListHeader = () => {
           </Button>
         </div>
 
-        <div className="flex items-center gap-x-2 p-1">
-          <MeetingsSearchFilter />
-          <StatusFilter />
-          <AgentIdFilter />
+        <ScrollArea>
+          <div className="flex items-center gap-x-2 p-1">
+            <MeetingsSearchFilter />
+            <StatusFilter />
+            <AgentIdFilter />
 
-          {isFilterActive && (
-            <Button variant="outline" size="sm" onClick={onClearFilters}>
-              <XCircleIcon />
-              <span>Clear</span>
-            </Button>
-          )}
-        </div>
+            {isFilterActive && (
+              <Button variant="outline" size="sm" onClick={onClearFilters}>
+                <XCircleIcon />
+                <span>Clear</span>
+              </Button>
+            )}
+          </div>
+
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </div>
     </>
   );
