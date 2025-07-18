@@ -9,4 +9,6 @@ export const meetingsUpdateSchema = meetingsInsertSchema.extend({
   id: z.string().min(1, { message: "Id is required" }),
 });
 
-export const meetingsRemoveSchema = z.object({ id: z.string() });
+export const meetingsRemoveSchema = z.object({
+  id: z.string().min(1, { message: "Id is required" }),
+});

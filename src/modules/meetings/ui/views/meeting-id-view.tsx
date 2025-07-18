@@ -44,7 +44,7 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
         //TODO: Invalidate free tier
         router.push("/meetings");
       },
-      onError: (error) => toast.error(`Error: ${error.data?.code}`),
+      onError: (error) => toast.error(error.message),
     }),
   );
 
@@ -84,7 +84,7 @@ export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
 
 export const MeetingIdLoadingView = () => (
   <LoadingState
-    title="Loading Agent"
+    title="Loading Meeting"
     description="This may take a few seconds..."
   />
 );
