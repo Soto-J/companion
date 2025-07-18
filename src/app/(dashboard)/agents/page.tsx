@@ -10,7 +10,8 @@ import type { SearchParams } from "nuqs";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
-import { loadSearchParams } from "@/modules/agents/ui/components/params";
+import { loadSearchParams } from "@/modules/agents/params";
+
 import { AgentsListHeader } from "@/modules/agents/ui/components/agents-list-header";
 import {
   AgentsLoadingView,
@@ -30,7 +31,7 @@ const AgentsPage = async ({ searchParams }: AgentsPageProps) => {
   }
 
   const filters = await loadSearchParams(searchParams);
-  
+
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(
     trpc.agents.getMany.queryOptions({ ...filters }),

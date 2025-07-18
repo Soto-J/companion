@@ -8,12 +8,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { meetingsInsertSchema } from "@/modules/meetings/schemas";
-import { MeetingGetOne } from "@/modules/meetings/types";
 
 import { useTRPC } from "@/trpc/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { toast } from "sonner";
+
+import { MeetingGetOne } from "@/modules/meetings/types";
 
 import { NewAgentDialog } from "@/modules/agents/ui/components/new-agent-dialog";
 
@@ -113,6 +114,21 @@ export const MeetingForm = ({
   const isEdit = !!initialValues?.id;
   const isPending = createMeeting.isPending || updateMeeting.isPending;
 
+  const commandSelectOptions = (agents.data?.items ?? []).map((agent) => ({
+    id: agent.id,
+    value: agent.id,
+    children: (
+      <div className="flex items-center justify-center gap-x-2">
+        <GeneratedAvatar
+          seed={agent.name}
+          variant="botttsNeutral"
+          className="size-6 border"
+        />
+        <span>{agent.name}</span>
+      </div>
+    ),
+  }));
+
   const onSubmit = (values: z.infer<typeof meetingsInsertSchema>) => {
     if (isEdit) {
       updateMeeting.mutate({ id: initialValues.id, ...values });
@@ -158,23 +174,9 @@ export const MeetingForm = ({
                   <CommandSelect
                     value={field.value}
                     placeHolder="Select an agent"
-                    isSearchable={false}
                     onSelect={field.onChange}
                     onSearch={setAgentSearch}
-                    options={(agents.data?.items ?? []).map((agent) => ({
-                      id: agent.id,
-                      value: agent.id,
-                      children: (
-                        <div className="flex items-center justify-center gap-x-2">
-                          <GeneratedAvatar
-                            seed={agent.name}
-                            variant="botttsNeutral"
-                            className="size-6 border"
-                          />
-                          <span>{agent.name}</span>
-                        </div>
-                      ),
-                    }))}
+                    options={commandSelectOptions}
                   />
                 </FormControl>
 

@@ -9,10 +9,10 @@ import { useAgentsFilters } from "@/modules/agents/hooks/use-agents-filter";
 import { LoadingState } from "@/components/loading-state";
 import { ErrorState } from "@/components/error-state";
 import { EmptyState } from "@/components/empty-state";
+import { DataPagination } from "@/components/data-pagination";
 
 import { DataTable } from "@/modules/agents/ui/components/data-table";
 import { Columns } from "@/modules/agents/ui/components/columns";
-import { DataPagination } from "@/modules/agents/ui/components/data-pagination";
 
 export const AgentsView = () => {
   const [filters, setFilters] = useAgentsFilters();
@@ -55,5 +55,8 @@ export const AgentsLoadingView = () => (
   />
 );
 export const AgentsErrorView = () => (
-  <ErrorState title="Error Loading Agents" description="Something went wrong!" />
+  <ErrorState
+    title="Error Loading Agents"
+    description="Something went wrong!"
+  />
 );

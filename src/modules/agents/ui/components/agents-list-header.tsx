@@ -19,12 +19,11 @@ export const AgentsListHeader = () => {
 
   const isFilterActive = !!filters.search;
 
-  const onClearFilters = () => {
+  const onClearFilters = () =>
     setFilters({
       search: "",
       page: DEFAULT_PAGE,
     });
-  };
 
   return (
     <>

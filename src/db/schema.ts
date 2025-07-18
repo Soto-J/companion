@@ -91,11 +91,11 @@ export const agents = mysqlTable("agents", {
 });
 
 export const meetingStatus = mysqlEnum("meeting_status", [
-  "upcoming",
   "active",
+  "cancelled",
   "completed",
   "processing",
-  "cancelled",
+  "upcoming",
 ]);
 
 export const meetings = mysqlTable("meetings", {
