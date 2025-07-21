@@ -2,20 +2,6 @@ import z from "zod";
 
 import { getTableColumns, and, eq, desc, count, like, sql } from "drizzle-orm";
 
-import { db } from "@/db";
-import { agents, meetings } from "@/db/schema";
-
-import {
-  meetingsInsertSchema,
-  meetingsRemoveSchema,
-  meetingsUpdateSchema,
-} from "@/modules/meetings/schemas";
-
-import { TRPCError } from "@trpc/server";
-import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
-
-import { MeetingStatus } from "@/modules/meetings/types";
-
 import {
   DEFAULT_PAGE,
   DEFAULT_PAGE_SIZE,
@@ -23,11 +9,28 @@ import {
   MAX_PAGE_SIZE,
 } from "@/constants";
 
+import { db } from "@/db";
+import { agents, meetings } from "@/db/schema";
+
+import { TRPCError } from "@trpc/server";
+import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
+
+import {
+  meetingsInsertSchema,
+  meetingsRemoveSchema,
+  meetingsUpdateSchema,
+} from "@/modules/meetings/schemas";
+import { MeetingStatus } from "@/modules/meetings/types";
+
+import { streamVideoClient } from "@/lib/stream-video-client";
+import { generateAvatarUri } from "@/lib/generate-avatar-uri";
+
 export const meetingRouter = createTRPCRouter({
   create: protectedProcedure
     .input(meetingsInsertSchema)
     .mutation(async ({ ctx, input }) => {
-      const [createdMeeting] = await db
+      // Create meeting
+      const [{ id: createdMeetingId }] = await db
         .insert(meetings)
         .values({
           userId: ctx.auth.user.id,
@@ -35,8 +38,59 @@ export const meetingRouter = createTRPCRouter({
         })
         .$returningId();
 
-      //TODO: Create stream call, Uppsert stream user
-      return createdMeeting;
+      const createdMeetingName = db
+        .select({ name: getTableColumns(meetings).name })
+        .from(meetings)
+        .where(eq(meetings.id, createdMeetingId));
+
+      // Create stream call
+      const call = streamVideoClient.video.call("default", createdMeetingId);
+      await call.create({
+        data: {
+          created_by_id: ctx.auth.user.id,
+          custom: {
+            meetingId: createdMeetingId,
+            meetingName: createdMeetingName,
+          },
+          settings_override: {
+            transcription: {
+              language: "en",
+              mode: "auto-on",
+              closed_caption_mode: "auto-on",
+            },
+            recording: {
+              mode: "auto-on",
+              quality: "1080p",
+            },
+          },
+        },
+      });
+
+      const [meetingCreator] = await db
+        .select({
+          id: getTableColumns(agents).id,
+          name: getTableColumns(agents).name,
+        })
+        .from(agents)
+        .where(eq(agents.id, createdMeetingId));
+
+      if (!meetingCreator) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Agent not found" });
+      }
+
+      // Put meeting creator into call
+      await streamVideoClient.upsertUsers([
+        {
+          ...meetingCreator,
+          role: "user",
+          image: generateAvatarUri({
+            seed: meetingCreator.name,
+            varient: "botttsNeutral",
+          }),
+        },
+      ]);
+
+      return { createdMeetingId, createdMeetingName };
     }),
 
   edit: protectedProcedure
@@ -77,6 +131,28 @@ export const meetingRouter = createTRPCRouter({
 
       return deletedMeeting;
     }),
+
+  generateToken: protectedProcedure.mutation(async ({ ctx }) => {
+    await streamVideoClient.upsertUsers([
+      {
+        id: ctx.auth.user.id,
+        name: ctx.auth.user.name,
+        role: "admin",
+        image:
+          ctx.auth.user?.image ??
+          generateAvatarUri({ seed: ctx.auth.user.name, varient: "initials" }),
+      },
+    ]);
+
+    const expirationTime = Math.floor(Date.now() / 1000) + 3600; // 1 hour
+    const issuedAt = Math.floor(Date.now() / 1000) - 60;
+
+    return streamVideoClient.generateUserToken({
+      user_id: ctx.auth.user.id,
+      exp: expirationTime,
+      validity_in_seconds: issuedAt,
+    });
+  }),
 
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
