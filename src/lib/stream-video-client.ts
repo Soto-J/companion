@@ -7,7 +7,8 @@ const VIDEO_API_KEY = process.env.NEXT_PUBLIC_STREAM_VIDEO_API_KEY;
 if (!VIDEO_API_KEY) {
   throw new Error("Error: Api Key missing");
 }
-const VIDEO_API_SECRET = process.env.NEXT_PUBLIC_STREAM_VIDEO_API_KEY;
+
+const VIDEO_API_SECRET = process.env.VIDEO_API_SECRET;
 
 if (!VIDEO_API_SECRET) {
   throw new Error("Error: Api Key missing");

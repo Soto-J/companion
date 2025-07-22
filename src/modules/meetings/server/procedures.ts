@@ -38,19 +38,25 @@ export const meetingRouter = createTRPCRouter({
         })
         .$returningId();
 
-      const createdMeetingName = db
-        .select({ name: getTableColumns(meetings).name })
+      const [createdMeeting] = await db
+        .select(
+          {
+          name: getTableColumns(meetings).name,
+          userId: getTableColumns(meetings).userId,
+          agentId: getTableColumns(meetings).agentId,
+        }
+      )
         .from(meetings)
         .where(eq(meetings.id, createdMeetingId));
 
       // Create stream call
-      const call = streamVideoClient.video.call("default", createdMeetingId);
+      const call = streamVideoClient.video.call("default", createdMeeting.userId);
       await call.create({
         data: {
           created_by_id: ctx.auth.user.id,
           custom: {
-            meetingId: createdMeetingId,
-            meetingName: createdMeetingName,
+            meetingId: createdMeeting.userId,
+            meetingName: createdMeeting.name,
           },
           settings_override: {
             transcription: {
@@ -72,7 +78,7 @@ export const meetingRouter = createTRPCRouter({
           name: getTableColumns(agents).name,
         })
         .from(agents)
-        .where(eq(agents.id, createdMeetingId));
+        .where(eq(agents.id, createdMeeting.agentId));
 
       if (!meetingCreator) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Agent not found" });
@@ -90,7 +96,7 @@ export const meetingRouter = createTRPCRouter({
         },
       ]);
 
-      return { createdMeetingId, createdMeetingName };
+      return { id: createdMeetingId, name: createdMeeting.name };
     }),
 
   edit: protectedProcedure

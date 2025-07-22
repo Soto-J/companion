@@ -81,6 +81,7 @@ export const agents = mysqlTable("agents", {
     .primaryKey()
     .$defaultFn(() => nanoid()),
   name: text("name").notNull(),
+  
   userId: varchar("user_id", { length: 32 })
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),

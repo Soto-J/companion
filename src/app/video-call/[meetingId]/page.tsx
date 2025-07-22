@@ -9,7 +9,11 @@ import { getQueryClient, trpc } from "@/trpc/server";
 
 import { auth } from "@/lib/auth";
 
-import { VideoCallView } from "@/modules/meetings/ui/views/video-call-view";
+import {
+  VideoCallErrorView,
+  VideoCallLoadingView,
+  VideoCallView,
+} from "@/modules/meetings/ui/views/video-call-view";
 
 interface CallPageProps {
   params: Promise<{ meetingId: string }>;
@@ -29,8 +33,8 @@ export const CallPage = async ({ params }: CallPageProps) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<p></p>}>
-        <ErrorBoundary fallback={<p></p>}>
+      <Suspense fallback={<VideoCallLoadingView />}>
+        <ErrorBoundary fallback={<VideoCallErrorView />}>
           <VideoCallView meetingId={meetingId} />
         </ErrorBoundary>
       </Suspense>

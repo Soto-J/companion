@@ -1,5 +1,7 @@
 "use client";
 
+import { ErrorState } from "@/components/error-state";
+import { LoadingState } from "@/components/loading-state";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
@@ -16,7 +18,19 @@ export const VideoCallView = ({ meetingId }: VideoCallViewProps) => {
   return (
     <div>
       video call view
-      {JSON.stringify(data, null, 2)}
     </div>
   );
 };
+
+export const VideoCallLoadingView = () => (
+  <LoadingState
+    title="Loading Video Call"
+    description="This may take a few seconds..."
+  />
+);
+export const VideoCallErrorView = () => (
+  <ErrorState
+    title="Error Loading Video Call"
+    description="Something went wrong!"
+  />
+);
