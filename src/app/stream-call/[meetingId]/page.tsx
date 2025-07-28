@@ -10,16 +10,16 @@ import { getQueryClient, trpc } from "@/trpc/server";
 import { auth } from "@/lib/auth";
 
 import {
-  VideoCallErrorView,
-  VideoCallLoadingView,
-  VideoCallView,
-} from "@/modules/meetings/ui/views/video-call-view";
+  StreamCallView,
+  StreamCallErrorView,
+  StreamCallLoadingView,
+} from "@/modules/stream-call/ui/views/stream-call-view";
 
-interface CallPageProps {
+interface StreamCallPageProps {
   params: Promise<{ meetingId: string }>;
 }
 
-export const CallPage = async ({ params }: CallPageProps) => {
+const StreamCallPage = async ({ params }: StreamCallPageProps) => {
   const session = auth.api.getSession({ headers: await headers() });
 
   if (!session) redirect("/sign-in");
@@ -28,16 +28,18 @@ export const CallPage = async ({ params }: CallPageProps) => {
 
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(
-    trpc.meetings.getOne.queryFilter({ id: meetingId }),
+    trpc.meetings.getOne.queryOptions({ id: meetingId }),
   );
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<VideoCallLoadingView />}>
-        <ErrorBoundary fallback={<VideoCallErrorView />}>
-          <VideoCallView meetingId={meetingId} />
+      <Suspense fallback={<StreamCallLoadingView />}>
+        <ErrorBoundary fallback={<StreamCallErrorView />}>
+          <StreamCallView meetingId={meetingId} />
         </ErrorBoundary>
       </Suspense>
     </HydrationBoundary>
   );
 };
+
+export default StreamCallPage;

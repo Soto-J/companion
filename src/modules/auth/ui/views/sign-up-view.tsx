@@ -35,7 +35,7 @@ const formSchema = z
     confirmPassword: z.string().min(1, { message: "Password is required" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords dont't match",
+    message: "Passwords don't match",
     path: ["confirmPassword"],
   });
 

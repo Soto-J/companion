@@ -39,23 +39,20 @@ export const meetingRouter = createTRPCRouter({
         .$returningId();
 
       const [createdMeeting] = await db
-        .select(
-          {
-          name: getTableColumns(meetings).name,
-          userId: getTableColumns(meetings).userId,
-          agentId: getTableColumns(meetings).agentId,
-        }
-      )
+        .select()
         .from(meetings)
         .where(eq(meetings.id, createdMeetingId));
 
       // Create stream call
-      const call = streamVideoClient.video.call("default", createdMeeting.userId);
+      const call = streamVideoClient.video.call(
+        "default",
+        createdMeeting.userId,
+      );
       await call.create({
         data: {
           created_by_id: ctx.auth.user.id,
           custom: {
-            meetingId: createdMeeting.userId,
+            meetingId: createdMeeting.id,
             meetingName: createdMeeting.name,
           },
           settings_override: {
@@ -64,15 +61,13 @@ export const meetingRouter = createTRPCRouter({
               mode: "auto-on",
               closed_caption_mode: "auto-on",
             },
-            recording: {
-              mode: "auto-on",
-              quality: "1080p",
-            },
+            recording: { mode: "auto-on", quality: "1080p" },
           },
         },
       });
 
-      const [meetingCreator] = await db
+      // Agent accossiated with meeting
+      const [assignedAgent] = await db
         .select({
           id: getTableColumns(agents).id,
           name: getTableColumns(agents).name,
@@ -80,23 +75,23 @@ export const meetingRouter = createTRPCRouter({
         .from(agents)
         .where(eq(agents.id, createdMeeting.agentId));
 
-      if (!meetingCreator) {
+      if (!assignedAgent) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Agent not found" });
       }
 
-      // Put meeting creator into call
+      // Insert Agent into call
       await streamVideoClient.upsertUsers([
         {
-          ...meetingCreator,
+          ...assignedAgent,
           role: "user",
           image: generateAvatarUri({
-            seed: meetingCreator.name,
+            seed: assignedAgent.name,
             varient: "botttsNeutral",
           }),
         },
       ]);
 
-      return { id: createdMeetingId, name: createdMeeting.name };
+      return createdMeeting;
     }),
 
   edit: protectedProcedure

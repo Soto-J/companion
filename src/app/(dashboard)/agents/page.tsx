@@ -36,7 +36,6 @@ const AgentsPage = async ({ searchParams }: AgentsPageProps) => {
   void queryClient.prefetchQuery(
     trpc.agents.getMany.queryOptions({ ...filters }),
   );
-
   return (
     <>
       <AgentsListHeader />
